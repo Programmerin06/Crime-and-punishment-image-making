@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>죄와 벌 (Crime and Punishment) - 등장인물 도감 & 관계 가계도</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for Crisp Korean & Classic Aesthetic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #121016;
+            color: #e2d8ce;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(45, 30, 20, 0.5), transparent 70%),
+                linear-gradient(to bottom, #16121b, #0c0a0e);
+            min-height: 100vh;
+        }
+
+        .serif-font {
+            font-family: 'Gowun Batang', serif;
+        }
+
+        /* Rendering for retro pixel graphics */
+        canvas.pixel-canvas {
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+            background: transparent;
+        }
+
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a1622;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3d314a;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #5c4870;
+        }
+
+        .vintage-box {
+            background: rgba(26, 22, 34, 0.85);
+            border: 2px solid #3d314a;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+        }
+
+        .vintage-box:hover {
+            border-color: #b8860b;
+            box-shadow: 0 6px 24px rgba(184, 134, 11, 0.2), inset 0 0 12px rgba(184, 134, 11, 0.1);
+        }
+
+        .name-box {
+            background: #efebd9;
+            border: 2px solid #2d2118;
+            color: #1a1008;
+            box-shadow: 2px 2px 0px #000;
+        }
+
+        .tab-btn.active {
+            background-color: #8b2626;
+            color: #fce8d5;
+            border-color: #d4af37;
+            box-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <header class="sticky top-0 z-50 bg-black/80 backdrop-blur border-b border-amber-900/40 px-4 lg:px-8 py-3 shadow-2xl">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-amber-900/80 border-2 border-amber-500 flex items-center justify-center font-bold text-amber-200 serif-font text-xl rounded shadow-inner">
+                    罪
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold serif-font text-amber-100 tracking-wide">
+                        죄와 벌 <span class="text-xs md:text-sm font-normal text-amber-400/80 tracking-normal">(Преступление и наказание)</span>
+                    </h1>
+                    <p class="text-xs text-stone-400">실존주의 문학 발제를 위한 2D 픽셀 캐릭터 도감 & 인물 관계 가계도</p>
+                </div>
+            </div>
+
+            <!-- Tab Navigation Buttons -->
+            <nav class="flex flex-wrap gap-2">
+                <button onclick="switchTab('cards')" id="tab-cards" class="tab-btn active px-4 py-2 text-xs md:text-sm font-bold rounded border border-stone-700 bg-stone-800 text-stone-300 hover:bg-stone-700 transition duration-200 flex items-center gap-1.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                    전체 캐릭터 도감
+                </button>
+                <button onclick="switchTab('tree')" id="tab-tree" class="tab-btn px-4 py-2 text-xs md:text-sm font-bold rounded border border-stone-700 bg-stone-800 text-stone-300 hover:bg-stone-700 transition duration-200 flex items-center gap-1.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11.5V14m0 0v2.5m0-2.5h10m-10 0H4m13 0V14m0 0v2.5m0-2.5h3m-13-5V6a2 2 0 012-2h2a2 2 0 012 2v3.5m0 0H7m6 0h4m-8 6.5V19a2 2 0 002 2h2a2 2 0 002-2v-1.5"></path></svg>
+                    인물 관계도 & 가계도
+                </button>
+                <button onclick="switchTab('bg')" id="tab-bg" class="tab-btn px-4 py-2 text-xs md:text-sm font-bold rounded border border-stone-700 bg-stone-800 text-stone-300 hover:bg-stone-700 transition duration-200 flex items-center gap-1.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                    작품 배경
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 md:p-6 lg:p-8">
+        
+        <!-- SECTION 1: Character Cards Grid -->
+        <section id="sec-cards" class="space-y-6">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-stone-900/60 p-4 rounded-lg border border-stone-800">
+                <div>
+                    <h2 class="text-xl font-bold text-amber-200 serif-font">주요 등장인물 픽셀 아이콘 도감</h2>
+                    <p class="text-xs text-stone-400 mt-1">Stardew Valley / 레트로 2D RPG 스타일로 정밀 렌더링된 24명의 등장인물 아이콘 및 호칭 정보입니다.</p>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="downloadAllAvatars()" class="text-xs bg-amber-900/80 hover:bg-amber-800 text-amber-100 border border-amber-600 px-3 py-1.5 rounded transition flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        스프라이트 압축 안내
+                    </button>
+                </div>
+            </div>
+
+            <!-- Grid Container for Character Cards -->
+            <div id="character-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- Dynamically populated -->
+            </div>
+        </section>
+
+        <!-- SECTION 2: Relationship Family Tree -->
+        <section id="sec-tree" class="hidden space-y-6">
+            <div class="bg-stone-900/60 p-4 rounded-lg border border-stone-800">
+                <h2 class="text-xl font-bold text-amber-200 serif-font">등장인물 관계 및 가계도 Diagram</h2>
+                <p class="text-xs text-stone-400 mt-1">라스콜니코프 가문, 마르멜라도프 가문, 공권력 및 하숙집 관계망을 시각적으로 구성한 구조도입니다.</p>
+            </div>
+
+            <div class="space-y-8">
+                <!-- Raskolnikov Family Tree Box -->
+                <div class="vintage-box p-6 rounded-xl space-y-4">
+                    <div class="border-b border-amber-900/50 pb-2 flex items-center justify-between">
+                        <h3 class="text-lg font-bold text-amber-300 serif-font flex items-center gap-2">
+                            <span class="w-3 h-3 bg-red-700 inline-block rounded-full"></span>
+                            라스콜니코프 가문 & 주요 주변 인물 (Raskolnikov Clan)
+                        </h3>
+                        <span class="text-xs text-stone-400">가족 관계 / 친구 / 약혼</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Mother -->
+                        <div class="bg-black/40 p-4 rounded-lg border border-stone-800 flex flex-col items-center text-center">
+                            <canvas id="tree-canvas-pulcheria" width="96" height="112" class="pixel-canvas mb-2"></canvas>
+                            <span class="text-xs text-amber-400 font-bold">어머니</span>
+                            <h4 class="text-sm font-bold text-stone-100 mt-0.5">풀헤리아 알렉산드로브나</h4>
+                            <p class="text-[11px] text-stone-400 mt-1">아들을 위해 끊임없이 희생하고 기도하는 어머니</p>
+                        </div>
+                        <!-- Protagonist -->
+                        <div class="bg-amber-950/40 p-4 rounded-lg border-2 border-amber-600 flex flex-col items-center text-center shadow-lg relative">
+                            <span class="absolute -top-3 bg-amber-600 text-stone-950 text-[10px] font-black px-2 py-0.5 rounded-full uppercase">중심 인물</span>
+                            <canvas id="tree-canvas-rodion" width="96" height="112" class="pixel-canvas mb-2"></canvas>
+                            <span class="text-xs text-amber-300 font-bold">주인공 (23세 법학도)</span>
+                            <h4 class="text-base font-black text-amber-100 mt-0.5">로지온 라스콜니코프 (로쟈)</h4>
+                            <p class="text-[11px] text-stone-300 mt-1">초인사상으로 고리대금업자 알료나를 살해한 청년</p>
+                        </div>
+                        <!-- Sister -->
+                        <div class="bg-black/40 p-4 rounded-lg border border-stone-800 flex flex-col items-center text-center">
+                            <canvas id="tree-canvas-dunya" width="96" height="112" class="pixel-canvas mb-2"></canvas>
+                            <span class="text-xs text-amber-400 font-bold">여동생</span>
+                            <h4 class="text-sm font-bold text-stone-100 mt-0.5">아브도치야 라스콜니코바 (두냐)</h4>
+                            <p class="text-[11px] text-stone-400 mt-1">오빠와 가문의 재정을 위해 자신을 희생하려는 누이</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Marmeladov Family Box -->
+                <div class="vintage-box p-6 rounded-xl space-y-4">
+                    <div class="border-b border-amber-900/50 pb-2 flex items-center justify-between">
+                        <h3 class="text-lg font-bold text-amber-300 serif-font flex items-center gap-2">
+                            <span class="w-3 h-3 bg-amber-600 inline-block rounded-full"></span>
+                            마르멜라도프 가문 (Marmeladov Family)
+                        </h3>
+                        <span class="text-xs text-stone-400">비극과 종교적 구원의 상징</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div class="bg-black/40 p-3 rounded-lg border border-stone-800 flex flex-col items-center text-center">
+                            <canvas id="tree-canvas-semyon" width="80" height="96" class="pixel-canvas mb-2"></canvas>
+                            <span class="text-[11px] text-amber-400 font-bold">가장 (실직 관리)</span>
+                            <h4 class="text-xs font-bold text-stone-100">세묜 마르멜라도프</h4>
+                            <p class="text-[10px] text-stone-400 mt-1">술에 빠져 가정을 파탄낸 고뇌하는 알코올중독자</p>
+                        </div>
+                        <div class="bg-black/40 p-3 rounded-lg border border-stone-800 flex flex-col items-center text-center">
+                            <canvas id="tree-canvas-katerina" width="80" height="96" class="pixel-canvas mb-2"></canvas>
+                            <span class="text-[11px] text-amber-400 font-bold">아내 (폐병)</span>
+                            <h4 class="text-xs font-bold text-stone-100">카체리나 이바노브나</h4>
+                            <p class="text-[10px] text-stone-400 mt-1">극심한 가난과 병 속에서도 자존심을 지키려는 비극적 여성</p>
+                        </div>
+                        <div class="bg-amber-950/30 p-3 rounded-lg border border-amber-600 flex flex-col items-center text-center">
+                            <canvas id="tree-canvas-sonya" width="80" height="96" class="pixel-canvas mb-2"></canvas>
+                            <span class="text-[11px] text-amber-300 font-bold">친딸 (18세)</span>
+                            <h4 class="text-xs font-bold text-amber-100">소피야 (소냐)</h4>
+                            <p class="text-[10px] text-stone-300 mt-1">가족을 위해 창녀가 되었으나 순수한 신앙으로 구원하는 여인</p>
+                        </div>
+                        <div class="bg-black/40 p-3 rounded-lg border border-stone-800 flex flex-col items-center text-center">
+                            <canvas id="tree-canvas-polina" width="80" height="96" class="pixel-canvas mb-2"></canvas>
+                            <span class="text-[11px] text-amber-400 font-bold">큰딸</span>
+                            <h4 class="text-xs font-bold text-stone-100">폴리나 (폴렌카)</h4>
+                            <p class="text-[10px] text-stone-400 mt-1">어린 나이에 동생들을 돌보는 의젓한 소녀</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Police & Law Enforcement Box -->
+                <div class="vintage-box p-6 rounded-xl space-y-4">
+                    <div class="border-b border-amber-900/50 pb-2 flex items-center justify-between">
+                        <h3 class="text-lg font-bold text-amber-300 serif-font flex items-center gap-2">
+                            <span class="w-3 h-3 bg-blue-600 inline-block rounded-full"></span>
+                            수사 기관 & 공권력 (Police & Legal System)
+                        </h3>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-black/40 p-3 rounded-lg border border-stone-800 flex flex-col items-center text-center">
+                            <canvas id="tree-canvas-porfiry" width="80" height="96" class="pixel-canvas mb-2"></canvas>
+                            <span class="text-[11px] text-amber-400 font-bold">예심판사</span>
+                            <h4 class="text-xs font-bold text-stone-100">포르피리 페트로비치</h4>
+                            <p class="text-[10px] text-stone-400 mt-1">날카로운 심리전으로 라스콜니코프의 범행을 파헤침</p>
+                        </div>
+                        <div class="bg-black/40 p-3 rounded-lg border border-stone-800 flex flex-col items-center text-center">
+                            <canvas id="tree-canvas-nikodim" width="80" height="96" class="pixel-canvas mb-2"></canvas>
+                            <span class="text-[11px] text-amber-400 font-bold">경찰 서장</span>
+                            <h4 class="text-xs font-bold text-stone-100">니코짐 포미치</h4>
+                            <p class="text-[10px] text-stone-400 mt-1">온화하고 신사적인 성품의 관할 서장</p>
+                        </div>
+                        <div class="bg-black/40 p-3 rounded-lg border border-stone-800 flex flex-col items-center text-center">
+                            <canvas id="tree-canvas-zamyotov" width="80" height="96" class="pixel-canvas mb-2"></canvas>
+                            <span class="text-[11px] text-amber-400 font-bold">경찰서 서기</span>
+                            <h4 class="text-xs font-bold text-stone-100">자묘토프</h4>
+                            <p class="text-[10px] text-stone-400 mt-1">카페에서 라스콜니코프의 기묘한 도발을 받는 젊은 서기</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: Saint Petersburg Background -->
+        <section id="sec-bg" class="hidden space-y-6">
+            <div class="vintage-box p-8 rounded-xl max-w-4xl mx-auto space-y-6">
+                <div class="border-b border-amber-900/50 pb-4">
+                    <h2 class="text-2xl font-bold text-amber-200 serif-font">작품 배경: 19세기 상트페테르부르크</h2>
+                    <p class="text-xs text-amber-400/80 mt-1">도스토옙스키의 소설 속에 흐르는 질식할 듯한 가난과 실존적 고뇌의 공간</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div class="space-y-4 text-sm text-stone-300 leading-relaxed">
+                        <p>
+                            <strong class="text-amber-200">숨막히는 무더위와 악취:</strong> <br>
+                            소설의 무대가 되는 상트페테르부르크의 여름은 답답한 먼지, 페인트 냄새, 술집에서 풍기는 악취로 가득 차 있습니다. 이 거칠고 비위생적인 도시 환경은 주인공 라스콜니코프의 병적인 내면과 환각을 극대화합니다.
+                        </p>
+                        <p>
+                            <strong class="text-amber-200">노란색 벽지와 관 같은 방:</strong> <br>
+                            라스콜니코프가 거주하는 하숙방은 마치 '관'이나 '다락방'처럼 비좁고 어두우며, 벽지는 낡은 노란색입니다. 이 노란빛은 소설 전체에서 병든 정신과 가난, 타락을 상징하는 대표적 상징물입니다.
+                        </p>
+                        <p>
+                            <strong class="text-amber-200">네바 강과 센나야 광장:</strong> <br>
+                            살인 모의가 시작되고 구걸과 범죄가 소용돌이치는 센나야 광장, 그리고 자살과 속죄의 선택지 사이에 놓인 네바 강의 다리들은 주인공의 실존적 선택을 비추는 무대입니다.
+                        </p>
+                    </div>
+
+                    <div class="bg-black/60 p-4 rounded-lg border border-stone-800 text-center flex flex-col items-center justify-center">
+                        <canvas id="spb-background-canvas" width="320" height="200" class="pixel-canvas rounded border border-amber-900/40 shadow-xl mb-3"></canvas>
+                        <span class="text-xs text-amber-400 font-mono">19th Century Saint Petersburg Pixel Canvas</span>
+                        <p class="text-[11px] text-stone-400 mt-1">"센나야 광장 근처의 회색빛 건물들과 네바 강변"</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal for Individual Character Details & Export -->
+    <div id="char-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="vintage-box p-6 rounded-xl max-w-md w-full relative space-y-4">
+            <button onclick="closeModal()" class="absolute top-3 right-3 text-stone-400 hover:text-white text-lg font-bold">✕</button>
+            
+            <div id="modal-content" class="text-center space-y-3">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Full character dataset provided by user
+        const characterData = [
+            {
+                id: "rodion",
+                name: "로지온 라스콜니코프",
+                fullNames: "로디온(로쟈, 로젠카, 로지카, 로지엔키) 로마노비치(로마느이치) 라스콜니코프",
+                role: "주인공 / 휴학 중인 23세 법학도",
+                prop: "손에 든 도끼와 법학 책",
+                desc: "극심한 가난 속에서 비상한 지능으로 '비범인(초인) 사상'을 구상하고, 사회적 해악이라 여긴 고리대금업자 노파를 살해하는 인물.",
+                palette: { hair: "#4a3328", skin: "#eed2c1", coat: "#3b3336", shirt: "#8c7b70", item: "#a8a8a8" }
+            },
+            {
+                id: "dunya",
+                name: "아브도치야 라스콜니코바",
+                fullNames: "아브도치야(두나, 두네치카) 로마노브나 라스콜니코바",
+                role: "라스콜니코프의 여동생",
+                prop: "단정한 숄과 편지",
+                desc: "오빠와 어머니를 구하기 위해 루쥔과의 원치 않는 결혼을 결심할 정도로 가족을 위해 자신을 희생하려는 곧고 강인한 성품의 소유자.",
+                palette: { hair: "#5c3d2e", skin: "#fae2d5", coat: "#6b424e", shirt: "#e3d1be", item: "#d1b48c" }
+            },
+            {
+                id: "pulcheria",
+                name: "풀헤리아 라스콜니코바",
+                fullNames: "풀헤리아 알렉산드로브나 라스콜니코바",
+                role: "라스콜니코프의 어머니",
+                prop: "수첩과 작은 손수건",
+                desc: "아들 로지온을 깊이 사랑하고 자부심을 가지며, 아들의 범죄와 상처 앞에서 묵묵히 헌신하다 비극을 맞이하는 어머니.",
+                palette: { hair: "#8a8583", skin: "#f3dcd0", coat: "#4a3b32", shirt: "#8c6b58", item: "#ffffff" }
+            },
+            {
+                id: "sonya",
+                name: "소피야 마르멜라도바",
+                fullNames: "소피야(소냐, 소네치카) 세묘노브나 마르멜라도바",
+                role: "마르멜라도프의 친딸 (18세)",
+                prop: "작은 십자가와 성경책",
+                desc: "굶주리는 가족을 구하기 위해 노란 표찰(창녀)을 받지만, 기독교적 순수함과 헌신으로 라스콜니코프를 속죄로 이끄는 구원의 인물.",
+                palette: { hair: "#6e4b33", skin: "#fbe8dc", coat: "#2e2d38", shirt: "#b89053", item: "#d4af37" }
+            },
+            {
+                id: "semyon",
+                name: "세묜 마르멜라도프",
+                fullNames: "세묜 자하로비치(자하르이치) 마르멜라도프",
+                role: "실직한 관료",
+                prop: "독한 술병과 구겨진 관리복",
+                desc: "알코올 중독에 빠져 가족을 가난으로 몰아넣었으나, 자신의 타락과 죄를 깊이 인식하며 눈물 흘리는 비극적 인물.",
+                palette: { hair: "#382d28", skin: "#e0c2b1", coat: "#2b382d", shirt: "#827160", item: "#70a080" }
+            },
+            {
+                id: "katerina",
+                name: "카체리나 마르멜라도바",
+                fullNames: "카체리나 이바노브나 마르멜라도바",
+                role: "마르멜라도프의 아내",
+                prop: "흐트러진 숄과 붉은 뺨(폐병)",
+                desc: "귀족 가문 출신의 자부심을 가졌으나 극심한 가난과 폐병으로 광기에 사로잡혀 자식들을 지키려 발버둥 치는 비운의 여성.",
+                palette: { hair: "#4d332d", skin: "#eed0cf", coat: "#5e2b37", shirt: "#c2a382", item: "#b83b3b" }
+            },
+            {
+                id: "polina",
+                name: "폴리나 미하일로브나",
+                fullNames: "폴리나(폴렌카, 폴랴, 폴레치카) 미하일로브나",
+                role: "카체리나의 큰딸",
+                prop: "동생들의 손을 잡은 모습",
+                desc: "비참한 가정 환경 속에서도 어린 동생들을 보살피고 라스콜니코프에게 감사하는 순진무구한 어린 소녀.",
+                palette: { hair: "#7a533c", skin: "#fbe3d5", coat: "#786558", shirt: "#d6c1b0", item: "#ffffff" }
+            },
+            {
+                id: "razumikhin",
+                name: "드미트리 라주미한",
+                fullNames: "드미트리 프로코피이치 라주미한(브라주미힌)",
+                role: "대학생 / 라스콜니코프의 친한 친구",
+                prop: "빵 조각과 두꺼운 책",
+                desc: "솔직하고 열정적이며 라스콜니코프가 위기에 처했을 때 몸을 사리지 않고 도와주는 가장 미더운 충실한 친구.",
+                palette: { hair: "#8c4d28", skin: "#f3d5c0", coat: "#364a38", shirt: "#e3c28d", item: "#c49241" }
+            },
+            {
+                id: "porfiry",
+                name: "포르피리 페트로비치",
+                fullNames: "포르피리 페트로비치",
+                role: "예심판사 (라주미힌의 친척)",
+                prop: "돋보기와 수사 서류",
+                desc: "뛰어난 심리학적 통찰력을 지닌 예심판사. 범증이 없는 상태에서도 라스콜니코프의 심리를 파고들어 자수를 유도함.",
+                palette: { hair: "#2b2523", skin: "#e3c2b1", coat: "#24252e", shirt: "#d9d0c7", item: "#4180ab" }
+            },
+            {
+                id: "zosimov",
+                name: "조시모프",
+                fullNames: "조시모프",
+                role: "의사 (라주미힌의 친구)",
+                prop: "의료 가방과 청진기",
+                desc: "라스콜니코프의 쇠약해진 몸과 신경증을 치료하려 애쓰는 자부심 강한 젊은 의사.",
+                palette: { hair: "#3d2e27", skin: "#eed5c5", coat: "#1e3a40", shirt: "#ffffff", item: "#a83232" }
+            },
+            {
+                id: "alyona",
+                name: "알료나 이바노브나",
+                fullNames: "알료나 이바노브나",
+                role: "60세 고리대금업자 노파",
+                prop: "전당포 열쇠 꾸러미와 돈주머니",
+                desc: "가난한 이들의 피를 파먹고 사는 탐욕스럽고 냉혹한 노파. 라스콜니코프가 정한 '살해 대상'.",
+                palette: { hair: "#a8a29e", skin: "#e0beaa", coat: "#403126", shirt: "#785b47", item: "#d4af37" }
+            },
+            {
+                id: "lizaveta",
+                name: "리자베타 이바노브나",
+                fullNames: "리자베타 이바노브나",
+                role: "알료나의 이복 여동생",
+                prop: "작은 보따리와 헌 두건",
+                desc: "언니 알료나에게 학대받으면서도 순종적이고 착하게 살아가다, 사건 당일 우연히 현장에 들어와 라스콜니코프에게 억울하게 희생되는 인물.",
+                palette: { hair: "#4d392d", skin: "#e8c9b7", coat: "#5e5852", shirt: "#a89b8d", item: "#b8956b" }
+            },
+            {
+                id: "svidrigailov",
+                name: "아르카지 스비드리가일로프",
+                fullNames: "아르카지 이바노비치 스비드리가일로프",
+                role: "지주 (두냐가 교사로 있던 집 가장)",
+                prop: "권총과 도박 카드",
+                desc: "방탕과 쾌락을 좇는 냉소적 인물이지만, 때로는 의외의 선행을 베풀기도 하는 도덕적 허무주의의 극단에 선 인물.",
+                palette: { hair: "#1c2024", skin: "#ded2cc", coat: "#1a1a24", shirt: "#3a394d", item: "#6e6e6e" }
+            },
+            {
+                id: "marfa",
+                name: "마르파 스비드리가일로바",
+                fullNames: "마르파 페트로브나 스비드리가일로바",
+                role: "스비드리가일로프의 부인",
+                prop: "화려한 링 귀걸이와 유언장",
+                desc: "남편의 방탕함을 감싸안으려 했으며, 두냐를 오해했다가 유산을 남겨 오해를 풀고 숨지는 인물.",
+                palette: { hair: "#6e4b3b", skin: "#ebd5c8", coat: "#5c2b4d", shirt: "#d9a3bd", item: "#ffd700" }
+            },
+            {
+                id: "luzhin",
+                name: "표트르 페트로비치 루쥔",
+                fullNames: "표트르 페트로비치 루쥔",
+                role: "변호사 (두냐의 약혼자)",
+                prop: "계산서와 신사 모자",
+                desc: "가난한 두냐를 아내로 맞아 평생 자신에게 복종하게 만들려 하는 속물적이고 지극히 계산적인 인물.",
+                palette: { hair: "#29221f", skin: "#eed0be", coat: "#1f222e", shirt: "#ffffff", item: "#3b5282" }
+            },
+            {
+                id: "nikodim",
+                name: "니코짐 포미치",
+                fullNames: "니코짐 포미치",
+                role: "경찰 서장",
+                prop: "경찰 모자와 제복 지팡이",
+                desc: "라스콜니코프가 경찰서에서 혐의를 받거나 불안해할 때 온화한 태도를 보이는 경찰 서장.",
+                palette: { hair: "#38312e", skin: "#e5cbb8", coat: "#1c3144", shirt: "#85a6cc", item: "#e6b800" }
+            },
+            {
+                id: "porokh",
+                name: "일리야 포로흐",
+                fullNames: "일리야 페트로비치 포로흐",
+                role: "경찰 부서장 (중위)",
+                prop: "장부와 날카로운 호통",
+                desc: "다혈질에 거친 성격을 지닌 중위. 라스콜니코프의 이상 행동에 의심을 가지기도 함.",
+                palette: { hair: "#4d2e23", skin: "#e3c2af", coat: "#192836", shirt: "#b5c4d4", item: "#a83232" }
+            },
+            {
+                id: "zamyotov",
+                name: "알렉산드로 자묘토프",
+                fullNames: "알렉산드로 그리고리예비치 자묘토프",
+                role: "경찰서 서기",
+                prop: "신문지면과 찻잔",
+                desc: "라스콜니코프와 '팔레 드 크리스탈' 카페에서 범죄에 관해 도발적인 대화를 나누는 민감한 서기.",
+                palette: { hair: "#5e3e2b", skin: "#f0d3c2", coat: "#2e3b2e", shirt: "#e0d3c1", item: "#d4af37" }
+            },
+            {
+                id: "praskovya",
+                name: "프라스코비야 자르니츠이나",
+                fullNames: "프라스코비야(파센카) 자르니츠이나",
+                role: "라스콜니코프의 하숙집 주인",
+                prop: "하숙집 열쇠 뭉치",
+                desc: "밀린 방세를 요구하면서도 건강이 악화된 라스콜니코프를 은근히 신경 쓰는 주인 아주머니.",
+                palette: { hair: "#52443d", skin: "#ebcdbd", coat: "#4a3328", shirt: "#a88372", item: "#c0c0c0" }
+            },
+            {
+                id: "nastasya",
+                name: "나스타시야 페트로브나",
+                fullNames: "나스타시야(나스타시유쉬카, 나스첸카) 페트로브나",
+                role: "하숙집 하녀",
+                prop: "뜨거운 수프 그릇",
+                desc: "방에 누워있는 라스콜니코프에게 수프와 차를 가져다주고 대화를 건네주는 인정 많은 하녀.",
+                palette: { hair: "#704838", skin: "#f2d8c9", coat: "#6b5443", shirt: "#e6c3a5", item: "#8b4513" }
+            },
+            {
+                id: "amalia",
+                name: "아말리야 리페베흐젤",
+                fullNames: "아말리야 이바노브나(표도로브나) 리페베흐젤",
+                role: "마르멜라도프 셋집 여주인",
+                prop: "화려한 레이스 모자",
+                desc: "독일계 셋집 여주인. 추도식 파티 자리에서 카체리나와 크게 다투는 허영심 많은 인물.",
+                palette: { hair: "#826b52", skin: "#f5dcd0", coat: "#6b3348", shirt: "#e6b3cc", item: "#ffffff" }
+            },
+            {
+                id: "lebezyatnikov",
+                name: "안드레이 레베쟈트니코프",
+                fullNames: "안드레이 세묘노비치 레베쟈트니코프",
+                role: "이웃 (진보 사상가)",
+                prop: "신사상 소책자",
+                desc: "당시 유행하던 공리주의와 진보 사상을 어설프게 신봉하며, 루쥔의 모략에 맞서 소냐의 무죄를 증언하는 인물.",
+                palette: { hair: "#6e4228", skin: "#edd4c4", coat: "#3b4a36", shirt: "#cfc1a5", item: "#4a708b" }
+            },
+            {
+                id: "nikolai",
+                name: "니콜라이 (미콜카)",
+                fullNames: "니콜라이(미콜라이, 미콜카, 니콜라쉬카)",
+                role: "젊은 칠장이",
+                prop: "페인트 붓과 칠통",
+                desc: "살인 현장 근처에서 일하다 억울한 누명을 썼으나, 종교적 자발적 고통을 받기 위해 거짓 자백을 하는 칠장이.",
+                palette: { hair: "#523b2e", skin: "#f0d5c4", coat: "#384552", shirt: "#d6be96", item: "#4180ab" }
+            },
+            {
+                id: "dmitri_worker",
+                name: "드미트리 (칠장이 동료)",
+                fullNames: "드미트리(미트레이, 미치카)",
+                role: "니콜라이의 동료 칠장이",
+                prop: "칠장 작업 도구",
+                desc: "니콜라이와 함께 현장에서 일했던 동료 칠장이.",
+                palette: { hair: "#4d382c", skin: "#ebd0bf", coat: "#4a3f38", shirt: "#bfa382", item: "#786558" }
+            }
+        ];
+
+        /**
+         * Custom 2D Pixel Sprite Engine
+         * Renders detailed RPGMaker/Stardew Valley style proportional 2D pixel avatars
+         */
+        function drawPixelCharacter(canvas, char, scale = 3) {
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.imageSmoothingEnabled = false;
+
+            const p = char.palette;
+            const w = canvas.width / scale;
+            const h = canvas.height / scale;
+
+            // Center offsets
+            const cx = Math.floor(w / 2);
+            const topY = Math.floor(h / 6);
+
+            // Shadow under feet
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+            ctx.beginPath();
+            ctx.ellipse(cx * scale, (topY + 28) * scale, 10 * scale, 4 * scale, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Helper to draw scaled pixel grid rectangles
+            function rect(x, y, width, height, color) {
+                ctx.fillStyle = color;
+                ctx.fillRect((cx + x) * scale, (topY + y) * scale, width * scale, height * scale);
+            }
+
+            // 1. Hair Back (if long)
+            if (char.id === "dunya" || char.id === "sonya" || char.id === "katerina" || char.id === "pulcheria") {
+                rect(-6, 4, 12, 14, p.hair);
+            }
+
+            // 2. Legs & Shoes
+            rect(-4, 20, 3, 7, "#1a1614");
+            rect(1, 20, 3, 7, "#1a1614");
+
+            // 3. Body / Torso
+            rect(-5, 9, 10, 12, p.coat);
+            rect(-2, 9, 4, 8, p.shirt);
+
+            // 4. Arms
+            rect(-7, 10, 2, 8, p.coat);
+            rect(5, 10, 2, 8, p.coat);
+            // Hands
+            rect(-7, 18, 2, 2, p.skin);
+            rect(5, 18, 2, 2, p.skin);
+
+            // 5. Head & Neck
+            rect(-1, 8, 2, 2, p.skin); // neck
+            rect(-5, 0, 10, 9, p.skin); // face
+
+            // 6. Eyes & Facial Features
+            rect(-3, 3, 2, 2, "#1a1008"); // Left eye
+            rect(1, 3, 2, 2, "#1a1008");  // Right eye
+            rect(-3, 3, 1, 1, "#ffffff"); // Highlight
+            rect(1, 3, 1, 1, "#ffffff");
+
+            // Mouth / Expression
+            if (char.id === "alyona" || char.id === "katerina") {
+                rect(-2, 7, 4, 1, "#4a2420"); // Frown
+            } else if (char.id === "razumikhin" || char.id === "polina") {
+                rect(-2, 6, 4, 1, "#9e4034"); // Smile
+            } else {
+                rect(-1, 6, 2, 1, "#7d483e"); // Neutral
+            }
+
+            // 7. Hair Front & Style
+            rect(-6, -2, 12, 4, p.hair);
+            rect(-6, 0, 2, 6, p.hair);
+            rect(4, 0, 2, 6, p.hair);
+
+            // Special Hair Modifiers
+            if (char.id === "rodion") {
+                // Messy unkempt hair
+                rect(-6, -3, 12, 3, p.hair);
+                rect(-4, -4, 8, 2, p.hair);
+                rect(-7, 1, 2, 4, p.hair);
+            } else if (char.id === "alyona" || char.id === "pulcheria") {
+                // Bun or grey hair top
+                rect(-4, -4, 8, 3, p.hair);
+            } else if (char.id === "nikodim") {
+                // Police Cap
+                rect(-7, -4, 14, 4, "#1c3144");
+                rect(-8, 0, 16, 1, "#e6b800");
+            } else if (char.id === "sonya") {
+                // Headscarf
+                rect(-6, -2, 12, 3, "#b89053");
+            }
+
+            // 8. Specific Held Props & Accessories
+            if (char.id === "rodion") {
+                // Axe in right hand
+                rect(6, 11, 1, 10, "#5e4333"); // handle
+                rect(6, 9, 4, 3, p.item);     // axe blade
+            } else if (char.id === "sonya") {
+                // Gold Cross
+                rect(-1, 13, 2, 4, p.item);
+                rect(-2, 14, 4, 1, p.item);
+            } else if (char.id === "porfiry") {
+                // Magnifying glass
+                rect(6, 12, 1, 5, "#3a2d24");
+                rect(6, 10, 3, 3, p.item);
+            } else if (char.id === "semyon") {
+                // Green bottle
+                rect(6, 12, 2, 5, p.item);
+            } else if (char.id === "razumikhin") {
+                // Book
+                rect(-8, 12, 3, 5, p.item);
+            } else if (char.id === "alyona") {
+                // Key ring
+                rect(-8, 14, 3, 3, p.item);
+            } else if (char.id === "zosimov") {
+                // Medical bag
+                rect(6, 14, 4, 4, p.item);
+            }
+        }
+
+        function drawSPBBackground() {
+            const canvas = document.getElementById('spb-background-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            ctx.imageSmoothingEnabled = false;
+
+            // Sky gradient (gloomy twilight)
+            const sky = ctx.createLinearGradient(0, 0, 0, 120);
+            sky.addColorStop(0, '#1a1829');
+            sky.addColorStop(1, '#4a3740');
+            ctx.fillStyle = sky;
+            ctx.fillRect(0, 0, 320, 120);
+
+            // Neva River Water
+            ctx.fillStyle = '#1c2536';
+            ctx.fillRect(0, 120, 320, 80);
+
+            // Distant Buildings silhouette
+            ctx.fillStyle = '#13111c';
+            for (let i = 0; i < 320; i += 20) {
+                const height = 40 + (i % 30);
+                ctx.fillRect(i, 120 - height, 18, height);
+                // Windows
+                ctx.fillStyle = (i % 40 === 0) ? '#d4af37' : '#2e2633';
+                ctx.fillRect(i + 4, 120 - height + 10, 4, 6);
+                ctx.fillRect(i + 10, 120 - height + 10, 4, 6);
+                ctx.fillStyle = '#13111c';
+            }
+
+            // Bridge and Street Lamp
+            ctx.fillStyle = '#2b2633';
+            ctx.fillRect(0, 115, 320, 8); // Bridge
+            
+            // Street lamp
+            ctx.fillStyle = '#0a090d';
+            ctx.fillRect(40, 75, 4, 40);
+            ctx.fillStyle = '#ffd700';
+            ctx.beginPath();
+            ctx.arc(42, 75, 6, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function renderCharacterGrid() {
+            const grid = document.getElementById('character-grid');
+            grid.innerHTML = '';
+
+            characterData.forEach((char) => {
+                const card = document.createElement('div');
+                card.className = "vintage-box rounded-xl p-4 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 cursor-pointer";
+                card.onclick = () => openModal(char);
+
+                card.innerHTML = `
+                    <div>
+                        <!-- Sprite Display -->
+                        <div class="w-full h-36 bg-stone-950/80 rounded-lg border border-stone-800/80 flex items-center justify-center relative overflow-hidden mb-3">
+                            <canvas id="canvas-card-${char.id}" width="96" height="112" class="pixel-canvas"></canvas>
+                            <span class="absolute top-2 right-2 text-[10px] bg-stone-900/90 text-amber-300 px-2 py-0.5 rounded border border-amber-900/40 font-mono">
+                                ${char.role.split('/')[0]}
+                            </span>
+                        </div>
+
+                        <!-- Prop Badge -->
+                        <div class="mb-2">
+                            <span class="text-[10px] text-amber-400/90 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-900/50 inline-block">
+                                🔑 소품: ${char.prop}
+                            </span>
+                        </div>
+
+                        <p class="text-xs text-stone-300 leading-relaxed mb-3 line-clamp-2">
+                            ${char.desc}
+                        </p>
+                    </div>
+
+                    <!-- Clean Rectangle Name Box (Requested Format) -->
+                    <div class="name-box rounded p-2 text-center mt-2">
+                        <h4 class="text-xs font-black tracking-tight border-b border-stone-400/50 pb-1 mb-1">
+                            ${char.name}
+                        </h4>
+                        <p class="text-[10px] leading-tight text-stone-800 font-medium">
+                            ${char.fullNames}
+                        </p>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+
+                // Draw pixel avatar on canvas after insertion
+                setTimeout(() => {
+                    const cvs = document.getElementById(`canvas-card-${char.id}`);
+                    if (cvs) drawPixelCharacter(cvs, char, 3);
+                }, 0);
+            });
+        }
+
+        function renderTreeCanvases() {
+            const treeChars = [
+                { id: "rodion", canvasId: "tree-canvas-rodion" },
+                { id: "pulcheria", canvasId: "tree-canvas-pulcheria" },
+                { id: "dunya", canvasId: "tree-canvas-dunya" },
+                { id: "semyon", canvasId: "tree-canvas-semyon" },
+                { id: "katerina", canvasId: "tree-canvas-katerina" },
+                { id: "sonya", canvasId: "tree-canvas-sonya" },
+                { id: "polina", canvasId: "tree-canvas-polina" },
+                { id: "porfiry", canvasId: "tree-canvas-porfiry" },
+                { id: "nikodim", canvasId: "tree-canvas-nikodim" },
+                { id: "zamyotov", canvasId: "tree-canvas-zamyotov" }
+            ];
+
+            treeChars.forEach(item => {
+                const char = characterData.find(c => c.id === item.id);
+                const cvs = document.getElementById(item.canvasId);
+                if (char && cvs) {
+                    drawPixelCharacter(cvs, char, 2.5);
+                }
+            });
+        }
+
+        function switchTab(tabId) {
+            const tabs = ['cards', 'tree', 'bg'];
+            tabs.forEach(t => {
+                const sec = document.getElementById(`sec-${t}`);
+                const btn = document.getElementById(`tab-${t}`);
+                if (t === tabId) {
+                    sec.classList.remove('hidden');
+                    btn.classList.add('active');
+                } else {
+                    sec.classList.add('hidden');
+                    btn.classList.remove('active');
+                }
+            });
+
+            if (tabId === 'bg') {
+                setTimeout(drawSPBBackground, 50);
+            } else if (tabId === 'tree') {
+                setTimeout(renderTreeCanvases, 50);
+            }
+        }
+
+        function openModal(char) {
+            const modal = document.getElementById('char-modal');
+            const content = document.getElementById('modal-content');
+            
+            content.innerHTML = `
+                <div class="w-full h-40 bg-black/60 rounded-lg flex items-center justify-center border border-stone-800 mb-3">
+                    <canvas id="modal-canvas" width="120" height="140" class="pixel-canvas"></canvas>
+                </div>
+                
+                <div class="name-box rounded p-3 text-center mb-3">
+                    <h3 class="text-sm font-black">${char.name}</h3>
+                    <p class="text-xs text-stone-700 mt-0.5">${char.fullNames}</p>
+                </div>
+
+                <p class="text-xs text-amber-300 font-bold">${char.role}</p>
+                <p class="text-xs text-stone-300 leading-relaxed">${char.desc}</p>
+                <p class="text-[11px] text-amber-400 bg-amber-950/80 p-2 rounded border border-amber-900 mt-2">상징 소품: ${char.prop}</p>
+
+                <div class="pt-2 flex justify-center gap-2">
+                    <button onclick="downloadSingleAvatar('${char.id}')" class="text-xs bg-amber-800 hover:bg-amber-700 text-stone-100 font-bold px-4 py-2 rounded border border-amber-600 transition">
+                        픽셀 아이콘 이미지 다운로드 (.PNG)
+                    </button>
+                </div>
+            `;
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                const cvs = document.getElementById('modal-canvas');
+                if (cvs) drawPixelCharacter(cvs, char, 4);
+            }, 0);
+        }
+
+        function closeModal() {
+            document.getElementById('char-modal').classList.add('hidden');
+        }
+
+        function downloadSingleAvatar(charId) {
+            const char = characterData.find(c => c.id === charId);
+            if (!char) return;
+
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = 120;
+            tempCanvas.height = 140;
+            drawPixelCharacter(tempCanvas, char, 4);
+
+            const link = document.createElement('a');
+            link.download = `${char.name}_pixel_icon.png`;
+            link.href = tempCanvas.toDataURL('image/png');
+            link.click();
+        }
+
+        function downloadAllAvatars() {
+            alert("각 인물 카드를 클릭하면 고화질 픽셀 PNG 이미지를 개별적으로 다운로드할 수 있습니다!");
+        }
+
+        // Initialize App
+        window.onload = () => {
+            renderCharacterGrid();
+        };
+    </script>
+</body>
+</html>
